@@ -56,3 +56,8 @@ background {
     background-position: bottom;
 
 }
+
+laser {
+    width:10px; height:10px;
+    background-image: url(../images/laser.png);
+}

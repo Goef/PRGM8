@@ -2,15 +2,17 @@ class KeyboardObject{
     private leftKey:number = 65
     private rightKey:number = 68
     private spacebar:number = 32
+    private shootLaser:number = 69
+
     
 	private xSpeed: number = 0
     private ySpeed: number = 0
     
     private jump:boolean = false
     private inJump:boolean = false
-    private instance:any
+    private instance:Character
 
-    constructor(i:any){
+    constructor(i:Character){
         this.instance = i
         window.addEventListener("keydown", this.onKeydown.bind(this))
         window.addEventListener("keyup", this.onKeyUp.bind(this))
@@ -60,6 +62,10 @@ class KeyboardObject{
             case this.spacebar:
                 this.jump = true
                 break
+            case this.shootLaser:
+                this.instance.laser.active = true
+                break
+
         }
     }
 
@@ -75,6 +81,8 @@ class KeyboardObject{
 
                 case this.spacebar:
                 this.jump = false
+                break
+            case this.shootLaser:
                 break
         }
 
