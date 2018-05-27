@@ -11,14 +11,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var gameObject = (function () {
     function gameObject(div, x, y) {
+        this.div = div;
+        this.element = document.createElement(this.div);
         this.posX = x;
         this.posY = y;
-        this.div = div;
         this.createElement();
         this.setPosition();
     }
     gameObject.prototype.createElement = function () {
-        this.element = document.createElement(this.div);
         var foreground = document.getElementsByTagName("foreground")[0];
         foreground.appendChild(this.element);
     };
@@ -31,11 +31,13 @@ var Character = (function (_super) {
     __extends(Character, _super);
     function Character() {
         var _this = _super.call(this, "character", 0, 192) || this;
+        _this.laser = new Laser(_this);
         _this.keyBoardObject = new KeyboardObject(_this);
         return _this;
     }
     Character.prototype.update = function () {
         this.keyBoardObject.move();
+        this.laser.update(this);
     };
     return Character;
 }(gameObject));
@@ -47,7 +49,6 @@ var Game = (function () {
     }
     Game.prototype.gameLoop = function () {
         var _this = this;
-        console.log("updating the game");
         this.character.update();
         requestAnimationFrame(function () { return _this.gameLoop(); });
     };
@@ -61,6 +62,7 @@ var KeyboardObject = (function () {
         this.leftKey = 65;
         this.rightKey = 68;
         this.spacebar = 32;
+        this.shootLaser = 69;
         this.xSpeed = 0;
         this.ySpeed = 0;
         this.jump = false;
@@ -99,6 +101,9 @@ var KeyboardObject = (function () {
             case this.spacebar:
                 this.jump = true;
                 break;
+            case this.shootLaser:
+                this.instance.laser.active = true;
+                break;
         }
     };
     KeyboardObject.prototype.onKeyUp = function (event) {
@@ -112,9 +117,37 @@ var KeyboardObject = (function () {
             case this.spacebar:
                 this.jump = false;
                 break;
+            case this.shootLaser:
+                break;
         }
     };
     return KeyboardObject;
+}());
+var Laser = (function () {
+    function Laser(c) {
+        this.active = false;
+        this.posX = c.posX + 25;
+        this.posY = c.posY + 50;
+        this.speed = 5;
+        this.element = document.createElement("laser");
+        var f = document.getElementsByTagName('foreground')[0];
+        f.appendChild(this.element);
+    }
+    Laser.prototype.update = function (c) {
+        if (this.active == false) {
+            this.posX = c.posX + 25;
+            this.posY = c.posY + 50;
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        }
+        else {
+            this.posX += 10;
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+            if (this.posX >= window.innerWidth) {
+                this.active = false;
+            }
+        }
+    };
+    return Laser;
 }());
 var Slime = (function (_super) {
     __extends(Slime, _super);
