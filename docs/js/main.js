@@ -10,18 +10,44 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var EnemyFabric;
 (function (EnemyFabric_1) {
-    var Gnome = (function () {
-        function Gnome() {
+    var Slime = (function () {
+        function Slime(div, x, y) {
+            this.div = div;
+            this.element = document.createElement(this.div);
+            this.posX = x;
+            this.posY = y;
+            this.createElement();
+            this.setPosition();
         }
-        Gnome.prototype.getName = function () {
+        Slime.prototype.createElement = function () {
+            var foreground = document.getElementsByTagName("foreground")[0];
+            foreground.appendChild(this.element);
+        };
+        Slime.prototype.setPosition = function () {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        };
+        Slime.prototype.getName = function () {
             return "Gnome";
         };
-        return Gnome;
+        return Slime;
     }());
-    EnemyFabric_1.Gnome = Gnome;
+    EnemyFabric_1.Slime = Slime;
     var Dragon = (function () {
-        function Dragon() {
+        function Dragon(div, x, y) {
+            this.div = div;
+            this.element = document.createElement(this.div);
+            this.posX = x;
+            this.posY = y;
+            this.createElement();
+            this.setPosition();
         }
+        Dragon.prototype.createElement = function () {
+            var foreground = document.getElementsByTagName("foreground")[0];
+            foreground.appendChild(this.element);
+        };
+        Dragon.prototype.setPosition = function () {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        };
         Dragon.prototype.getName = function () {
             return "Dragon";
         };
@@ -31,12 +57,12 @@ var EnemyFabric;
     var EnemyFabric = (function () {
         function EnemyFabric() {
         }
-        EnemyFabric.spawnEnemy = function (type) {
-            if (type === "Dragon") {
-                return new Dragon();
+        EnemyFabric.spawnEnemy = function (div, x, y) {
+            if (div === "Dragon") {
+                return new Dragon(div, x, y);
             }
-            else if (type === "Gnome") {
-                return new Gnome();
+            else if (div === "slime") {
+                return new Slime(div, x, y);
             }
             return null;
         };
@@ -47,31 +73,37 @@ var EnemyFabric;
 var potionDecorator;
 (function (potionDecorator) {
     var healthPotion = (function () {
-        function healthPotion(hp) {
+        function healthPotion(hp, div, x, y) {
+            this.basehp = 20;
             this.hp = hp;
+            this.div = div;
+            this.element = document.createElement(this.div);
+            this.posX = x;
+            this.posY = y;
+            this.createElement();
+            this.setPosition();
+            console.log("your hp is", this.basehp + hp);
         }
+        healthPotion.prototype.createElement = function () {
+            var foreground = document.getElementsByTagName("foreground")[0];
+            foreground.appendChild(this.element);
+        };
+        healthPotion.prototype.setPosition = function () {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        };
         healthPotion.prototype.heal = function () {
         };
         return healthPotion;
     }());
     potionDecorator.healthPotion = healthPotion;
-    var manaPotion = (function () {
-        function manaPotion(mana) {
-            this.mana = mana;
-        }
-        manaPotion.prototype.heal = function () {
-        };
-        return manaPotion;
-    }());
-    potionDecorator.manaPotion = manaPotion;
     var PotionDecorator = (function () {
         function PotionDecorator(addOn, potion) {
             this.addOn = addOn;
             this.potion = potion;
         }
-        PotionDecorator.prototype.heal = function () {
-            console.log("`Your healing with the healt potion with", this.potion, "with", this.addOn);
-            this.potion.heal();
+        PotionDecorator.prototype.heal = function (dmg, effect) {
+            console.log("you take", dmg, "damage , and gain", effect);
+            this.potion.heal(dmg, effect);
         };
         return PotionDecorator;
     }());
@@ -82,7 +114,7 @@ var potionDecorator;
             return _super.call(this, addOn, potion) || this;
         }
         silent.prototype.heal = function () {
-            _super.prototype.heal.call(this);
+            _super.prototype.heal.call(this, 20, "silent walking");
             console.log("potion with silent");
         };
         return silent;
@@ -93,8 +125,8 @@ var potionDecorator;
         function damage(addOn, potion) {
             return _super.call(this, addOn, potion) || this;
         }
-        damage.prototype.addition = function () {
-            _super.prototype.heal.call(this);
+        damage.prototype.heal = function () {
+            _super.prototype.heal.call(this, 40, "extra damage per hit");
             console.log("potion with damage");
         };
         return damage;
@@ -160,20 +192,52 @@ var CompositePattern;
     CompositePattern.Gear = Gear;
     var sword = (function () {
         function sword(g) {
+            this.posX = 20;
+            this.posY = 40;
             this.g = g;
+            this.div = this.g + "sword";
+            console.log(this.div);
+            console.log(g);
         }
         sword.prototype.showInventory = function () {
             console.log("sword of", this.g, " is equipped.");
+            console.log(this.div);
+            this.element = document.createElement(this.div);
+            this.createElement();
+            this.setPosition();
+        };
+        sword.prototype.createElement = function () {
+            var foreground = document.getElementsByTagName("foreground")[0];
+            foreground.appendChild(this.element);
+        };
+        sword.prototype.setPosition = function () {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         };
         return sword;
     }());
     CompositePattern.sword = sword;
     var shield = (function () {
         function shield(g) {
+            this.posX = 40;
+            this.posY = 60;
             this.g = g;
+            this.div = this.g + "shield";
+            console.log(this.div);
+            console.log(g);
         }
         shield.prototype.showInventory = function () {
             console.log("shield of", this.g, " is equipped.");
+            console.log(this.div);
+            this.element = document.createElement(this.div);
+            this.createElement();
+            this.setPosition();
+        };
+        shield.prototype.createElement = function () {
+            var foreground = document.getElementsByTagName("foreground")[0];
+            foreground.appendChild(this.element);
+        };
+        shield.prototype.setPosition = function () {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         };
         return shield;
     }());
@@ -184,7 +248,7 @@ var CompositePattern;
     var GearSelector;
     (function (GearSelector) {
         function buyItems() {
-            var woodSword = new CompositePattern.sword("wood"), steelShield = new CompositePattern.shield("steel"), player1 = new CompositePattern.Gear("Player1");
+            var woodSword = new CompositePattern.sword("wood"), steelShield = new CompositePattern.shield("wood"), player1 = new CompositePattern.Gear("Player1");
             player1.add(woodSword);
             player1.add(steelShield);
             player1.showInventory();
@@ -197,12 +261,12 @@ var FactoryMethodPattern;
     var Demo;
     (function (Demo) {
         function spawnEnemy() {
-            var Dragon = EnemyFabric.EnemyFabric.spawnEnemy("Dragon");
-            var Gnome = EnemyFabric.EnemyFabric.spawnEnemy("Gnome");
-            var dragon2 = EnemyFabric.EnemyFabric.spawnEnemy("Dragon");
-            console.log(Dragon.getName());
-            console.log(Gnome.getName());
-            console.log(dragon2.getName());
+            var Dragon = EnemyFabric.EnemyFabric.spawnEnemy("Dragon", 200, 5);
+            var Gnome = EnemyFabric.EnemyFabric.spawnEnemy("slime", 480, 125);
+            var dragon2 = EnemyFabric.EnemyFabric.spawnEnemy("Dragon", 210, 5);
+            Dragon;
+            Gnome;
+            dragon2;
         }
         Demo.spawnEnemy = spawnEnemy;
         ;
@@ -213,14 +277,14 @@ var DecoratorPattern;
     var Demo;
     (function (Demo) {
         function heal() {
-            var potion1 = new potionDecorator.silent("60 seconds", new potionDecorator.healthPotion("60hp"));
-            var potion2 = new potionDecorator.damage("60 seconds", new potionDecorator.healthPotion("60hp"));
-            var potion3 = new potionDecorator.silent("60 seconds", new potionDecorator.damage("60 seconds", new potionDecorator.healthPotion("120hp")));
-            var potion4 = new potionDecorator.silent("30 seconds", new potionDecorator.manaPotion("30 mp"));
-            potion1.heal();
-            potion2.heal();
-            potion3.heal();
-            potion4.heal();
+            var hppotion = new potionDecorator.healthPotion(10, "potion", 50, 5);
+            var hpdmgpotion = new potionDecorator.damage(-20, new potionDecorator.healthPotion(10, "hpdmg", 100, 1));
+            var silentpotion = new potionDecorator.silent(-40, new potionDecorator.healthPotion(10, "hpsilent", 150, 1));
+            var hpdmgsilentpotion = new potionDecorator.silent(10, new potionDecorator.damage(20, new potionDecorator.healthPotion(50, "hpsilentdmg", 200, 1)));
+            silentpotion.heal();
+            hppotion.heal();
+            hpdmgpotion.heal();
+            hpdmgsilentpotion.heal();
         }
         Demo.heal = heal;
     })(Demo = DecoratorPattern.Demo || (DecoratorPattern.Demo = {}));
@@ -228,7 +292,6 @@ var DecoratorPattern;
 var Game = (function () {
     function Game() {
         this.character = new Character();
-        this.slime = new Slime();
         this.gameLoop();
     }
     Game.prototype.gameLoop = function () {

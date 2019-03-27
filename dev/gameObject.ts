@@ -2,7 +2,7 @@ abstract class gameObject{
     public element: HTMLElement
     public posX:number
     public posY:number
-    private div:string
+    public div:string
 
     constructor(div:string, x:number, y:number){
         this.div = div

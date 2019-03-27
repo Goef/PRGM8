@@ -61,3 +61,56 @@ laser {
     width:10px; height:10px;
     background-image: url(../images/laser.png);
 }
+
+dragon{
+    width:206px; height:142px;
+    background-image: url(../images/demon-attack.png);
+    transform: scaleX(-1);
+}
+
+potion{
+    width:40px; height:42px;
+    background-image: url(../images/hppotions.png);
+    transform: scaleX(-1);
+
+}
+hpdmg{
+    width:40px; height:42px;
+    background-image: url(../images/hpdmg.png);
+    transform: scaleX(-1);
+}
+
+hpsilent{
+    width:40px; height:42px;
+    background-image: url(../images/hpsilent.png);
+    transform: scaleX(-1);
+
+}
+hpsilentdmg{
+    width:40px; height:42px;
+    background-image: url(../images/hpsilentdmg.png);
+    transform: scaleX(-1);
+}
+
+woodsword{
+    width:40px; height:42px;
+    background-image: url(../images/woodsword.png);
+    transform: scaleX(-1);
+}
+
+steelsword{ width:40px; height:42px;
+    background-image: url(../images/steelsword.png);
+    transform: scaleX(-1);}
+
+woodshield{
+    border-radius: 50px;
+    background: brown;
+    width:  20px; 
+    height : 20px; 
+}
+steelshield{
+    border-radius: 50px;
+    background: silver;
+    width:  20px; 
+    height : 20px; 
+}

@@ -6,7 +6,7 @@ namespace CompositePattern {
 
 
     export class Gear implements gear {
-
+       
         private list: gear[];
         private g: String;
 
@@ -36,21 +36,60 @@ namespace CompositePattern {
 
     export class sword implements gear {
         private g: String;
+        public element: HTMLElement
+        public posX:number = 20
+        public posY:number = 40
+        public div:string
+
         constructor(g: String) {
             this.g = g;
+             this.div =  this.g + "sword"
+            console.log(this.div)
+            console.log(g)
         }
         public showInventory(): void {
             console.log("sword of", this.g, " is equipped.");
+            console.log(this.div)
+            this.element = document.createElement(this.div)
+            this.createElement()
+            this.setPosition()
+        }
+        createElement(){
+            let foreground = document.getElementsByTagName("foreground")[0]
+            foreground.appendChild(this.element)
+        }
+    
+        public setPosition() {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)"
         }
     }
     
     export class shield implements gear {
         private g: String;
+        public element: HTMLElement
+        public posX:number = 40
+        public posY:number = 60
+        public div:string
         constructor(g: String) {
             this.g = g;
+             this.div =  this.g + "shield"
+            console.log(this.div)
+            console.log(g)
         }
         public showInventory(): void {
             console.log("shield of", this.g, " is equipped.");
+            console.log(this.div)
+            this.element = document.createElement(this.div)
+            this.createElement()
+            this.setPosition()
+        }
+        createElement(){
+            let foreground = document.getElementsByTagName("foreground")[0]
+            foreground.appendChild(this.element)
+        }
+    
+        public setPosition() {
+            this.element.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)"
         }
     }
 }
